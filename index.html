@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Training Courses Master Calendar — Semester I • 2026 | E-Global Skill Academy</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a33;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#5cc8ff;
+      --good:#35d07f;
+      --warn:#ffcc66;
+      --regionA:#5cc8ff;
+      --regionB:#ff6b9d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 15% 0%, rgba(92,200,255,.18), transparent 60%),
+                  radial-gradient(1000px 500px at 85% 20%, rgba(53,208,127,.14), transparent 55%),
+                  var(--bg);
+      line-height:1.4;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{
+      padding:28px 16px 16px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;
+    }
+    .title h1{
+      margin:0 0 6px;
+      font-size:28px;
+      letter-spacing:.2px;
+    }
+    .title p{
+      margin:0;
+      color:var(--muted);
+      max-width:70ch;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:rgba(16,26,51,.65);
+      border-radius:12px;
+      color:var(--muted);
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .badge strong{color:var(--text)}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 16px 40px;
+    }
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding:14px;
+      border:1px solid var(--line);
+      background:rgba(16,26,51,.65);
+      border-radius:14px;
+      margin:16px 0 18px;
+    }
+    .controls input{
+      flex:1 1 320px;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:rgba(11,18,32,.65);
+      color:var(--text);
+      outline:none;
+    }
+    .controls .hint{
+      flex:1 1 220px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex; align-items:center;
+    }
+    .region-filters{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:14px;
+      border:1px solid var(--line);
+      background:rgba(16,26,51,.65);
+      border-radius:14px;
+      margin:0 0 18px;
+      align-items:center;
+    }
+    .region-filters label{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:600;
+    }
+    .region-btn{
+      padding:10px 18px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:rgba(11,18,32,.65);
+      color:var(--text);
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      transition:all .2s ease;
+    }
+    .region-btn:hover{
+      background:rgba(92,200,255,.15);
+      border-color:var(--accent);
+    }
+    .region-btn.active{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#0b1220;
+    }
+    .region-btn.region-a-btn.active{
+      background:var(--regionA);
+    }
+    .region-btn.region-b-btn.active{
+      background:var(--regionB);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    @media (min-width: 860px){
+      .grid{grid-template-columns: 1fr 1fr;}
+    }
+    .card{
+      border:1px solid var(--line);
+      background:rgba(16,26,51,.65);
+      border-radius:16px;
+      padding:14px;
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin:8px 0 10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(11,18,32,.55);
+      white-space:nowrap;
+    }
+    .pill .dot{width:8px;height:8px;border-radius:50%}
+    .dot.fee{background:var(--accent)}
+    .dot.dur{background:var(--good)}
+    .dot.tba{background:var(--warn)}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid var(--line);
+      font-size:13px;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+    }
+    th{
+      color:var(--muted);
+      font-weight:600;
+      background:rgba(11,18,32,.55);
+    }
+    tr:last-child td{border-bottom:none}
+    .muted{color:var(--muted)}
+    .footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      padding:14px;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      background:rgba(16,26,51,.35);
+    }
+    .hidden{display:none !important;}
+    .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .region-badge{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:6px;
+      font-size:11px;
+      font-weight:700;
+      margin-left:6px;
+    }
+    .region-badge.region-a{
+      background:var(--regionA);
+      color:#0b1220;
+    }
+    .region-badge.region-b{
+      background:var(--regionB);
+      color:#fff;
+    }
+    tr[data-region="region-a"] td:first-child{
+      border-left:3px solid var(--regionA);
+    }
+    tr[data-region="region-b"] td:first-child{
+      border-left:3px solid var(--regionB);
+    }
+    .timezone-info{
+      border:1px solid var(--line);
+      background:rgba(16,26,51,.65);
+      border-radius:14px;
+      margin:0 0 12px;
+      overflow:hidden;
+    }
+    .timezone-header{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .timezone-header:hover{
+      background:rgba(92,200,255,.08);
+    }
+    .timezone-title{
+      flex:1;
+      font-size:14px;
+      font-weight:600;
+      color:var(--text);
+    }
+    .toggle-icon{
+      color:var(--muted);
+      font-size:12px;
+      transition:transform .2s ease;
+    }
+    .toggle-icon.open{
+      transform:rotate(180deg);
+    }
+    .timezone-content{
+      padding:0 16px 16px;
+    }
+    .timezone-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:16px;
+    }
+    .timezone-column h4{
+      margin:0 0 10px;
+      font-size:13px;
+      color:var(--accent);
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+    .timezone-list{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .tz-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:6px 10px;
+      background:rgba(11,18,32,.55);
+      border-radius:8px;
+      font-size:12px;
+      border:1px solid var(--line);
+    }
+    .tz-item .country{
+      color:var(--text);
+      font-weight:500;
+    }
+    .tz-item .time{
+      color:var(--good);
+      font-weight:700;
+      white-space:nowrap;
+      margin-left:8px;
+    }
+  </style>
+</head>
+<div style="
+  max-width:1100px;
+  margin:16px auto 0;
+  padding:0 16px;
+">
+  <a href="https://eglobalskill.com"
+     style="
+       display:inline-block;
+       padding:12px 18px;
+       border-radius:10px;
+       background:#5cc8ff;
+       color:#0b1220;
+       font-weight:600;
+       text-decoration:none;
+       box-shadow:0 6px 18px rgba(92,200,255,.35);
+     ">
+    ← Back to E-Global Skill Home Page
+  </a>
+</div>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="title">
+      <h1>Training Courses Master Calendar — Semester I • Year 2026</h1>
+      <p>
+        Our goal at <strong>E-Global Skill Academy</strong> is to support your career development and provide the resources you need to plan the next six months of your professional journey.
+      </p>
+    </div>
+    <div class="badge">
+      <span>Semester:</span> <strong>Jan–Jul 2026</strong> •
+      <span>Format:</span> <strong>Half-day live sessions</strong>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="region-filters">
+    <label>Filter by Region:</label>
+    <button class="region-btn all-btn active" data-filter="all">All Regions</button>
+    <button class="region-btn region-a-btn" data-filter="region-a">Region A (Europe, Middle East, Africa, Asia, Australia)</button>
+    <button class="region-btn region-b-btn" data-filter="region-b">Region B (North & South America)</button>
+  </div>
+
+  <div class="timezone-info">
+    <div class="timezone-header" onclick="toggleTimezone('region-a-tz')">
+      <span class="region-badge region-a">Region A</span>
+      <span class="timezone-title">Session Start Times by Country</span>
+      <span class="toggle-icon" id="toggle-region-a-tz">▼</span>
+    </div>
+    <div class="timezone-content" id="region-a-tz" style="display:none;">
+      <div class="timezone-grid">
+        <div class="timezone-column">
+          <h4>Europe</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">United Kingdom</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">Ireland</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">Portugal</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">Switzerland</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Sweden</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Poland</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Italy</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Malta</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Greece</span><span class="time">11:00 am</span></div>
+          </div>
+        </div>
+        <div class="timezone-column">
+          <h4>Africa</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">Gambia</span><span class="time">8:00 am</span></div>
+            <div class="tz-item"><span class="country">Ghana</span><span class="time">8:00 am</span></div>
+            <div class="tz-item"><span class="country">Liberia</span><span class="time">8:00 am</span></div>
+            <div class="tz-item"><span class="country">Nigeria</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">Namibia</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Lesotho</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">South Africa</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Botswana</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">Kenya</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Uganda</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Egypt</span><span class="time">11:00 am</span></div>
+          </div>
+        </div>
+        <div class="timezone-column">
+          <h4>Middle East</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">Turkey</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Iraq</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Iran</span><span class="time">12:30 pm</span></div>
+            <div class="tz-item"><span class="country">Dubai (UAE)</span><span class="time">12:00 pm</span></div>
+          </div>
+        </div>
+        <div class="timezone-column">
+          <h4>Asia</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">Pakistan</span><span class="time">1:00 pm</span></div>
+            <div class="tz-item"><span class="country">India</span><span class="time">1:30 pm</span></div>
+            <div class="tz-item"><span class="country">Sri Lanka</span><span class="time">1:30 pm</span></div>
+            <div class="tz-item"><span class="country">Bangladesh</span><span class="time">2:00 pm</span></div>
+            <div class="tz-item"><span class="country">Thailand</span><span class="time">3:00 pm</span></div>
+            <div class="tz-item"><span class="country">Vietnam</span><span class="time">3:00 pm</span></div>
+            <div class="tz-item"><span class="country">Indonesia</span><span class="time">3:00 pm</span></div>
+            <div class="tz-item"><span class="country">Singapore</span><span class="time">4:00 pm</span></div>
+            <div class="tz-item"><span class="country">Philippines</span><span class="time">4:00 pm</span></div>
+            <div class="tz-item"><span class="country">China</span><span class="time">4:00 pm</span></div>
+            <div class="tz-item"><span class="country">Taiwan</span><span class="time">4:00 pm</span></div>
+            <div class="tz-item"><span class="country">Japan</span><span class="time">5:00 pm</span></div>
+          </div>
+        </div>
+        <div class="timezone-column">
+          <h4>Australia</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">Australia (Perth)</span><span class="time">4:00 pm</span></div>
+            <div class="tz-item"><span class="country">Australia (Sydney)</span><span class="time">6:00 pm</span></div>
+            <div class="tz-item"><span class="country">Papua New Guinea</span><span class="time">6:00 pm</span></div>
+            <div class="tz-item"><span class="country">Solomon Islands</span><span class="time">7:00 pm</span></div>
+            <div class="tz-item"><span class="country">Fiji</span><span class="time">8:00 pm</span></div>
+            <div class="tz-item"><span class="country">New Zealand</span><span class="time">8:00 pm</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timezone-info">
+    <div class="timezone-header" onclick="toggleTimezone('region-b-tz')">
+      <span class="region-badge region-b">Region B</span>
+      <span class="timezone-title">Session Start Times by Country</span>
+      <span class="toggle-icon" id="toggle-region-b-tz">▼</span>
+    </div>
+    <div class="timezone-content" id="region-b-tz" style="display:none;">
+      <div class="timezone-grid">
+        <div class="timezone-column">
+          <h4>North America</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">United States (Pacific)</span><span class="time">8:00 am</span></div>
+            <div class="tz-item"><span class="country">United States (Mountain)</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">United States (Central)</span><span class="time">10:00 am</span></div>
+            <div class="tz-item"><span class="country">United States (East)</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Canada (Vancouver)</span><span class="time">8:00 am</span></div>
+            <div class="tz-item"><span class="country">Canada (Toronto)</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Mexico</span><span class="time">9:00 am</span></div>
+            <div class="tz-item"><span class="country">Jamaica</span><span class="time">10:00 am</span></div>
+          </div>
+        </div>
+        <div class="timezone-column">
+          <h4>South America</h4>
+          <div class="timezone-list">
+            <div class="tz-item"><span class="country">Guyana</span><span class="time">11:00 am</span></div>
+            <div class="tz-item"><span class="country">Brazil</span><span class="time">12:00 pm (noon)</span></div>
+            <div class="tz-item"><span class="country">Argentina</span><span class="time">12:00 pm (noon)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input id="search" type="search" placeholder="Search a course… (e.g., leadership, project, mindset, quality)" />
+    <div class="hint">Tip: type a keyword to filter the calendar instantly.</div>
+  </div>
+
+  <div class="grid" id="courses">
+
+    <!-- 1) Essentials of Project Management -->
+    <section class="card course" data-title="Essentials of Project Management Essential of project management">
+      <h2>Essentials of Project Management</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $167</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>5 half-day sessions across 5 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Thursday</td><td>19 Feb • 26 Feb • 5 Mar • 12 Mar • 19 Mar</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Thursday</td><td>19 Feb • 26 Feb • 5 Mar • 12 Mar • 19 Mar</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Monday</td><td>16 Mar • 23 Mar • 30 Mar • 6 Apr • 13 Apr</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Monday</td><td>16 Mar • 23 Mar • 30 Mar • 6 Apr • 13 Apr</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 3A</strong> <span class="region-badge region-a">Region A</span></td><td>Tuesday</td><td>9 Jun • 16 Jun • 23 Jun • 30 Jun • 7 Jul</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 3B</strong> <span class="region-badge region-b">Region B</span></td><td>Tuesday</td><td>9 Jun • 16 Jun • 23 Jun • 30 Jun • 7 Jul</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 2) Problem-Solving Using the Deming Wheel: PDCA Cycle -->
+    <section class="card course" data-title="Problem Solving Deming Wheel PDCA Cycle Problem-Solving Using the Deming Wheel">
+      <h2>Problem-Solving Using the Deming Wheel: PDCA Cycle</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $147</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>4 half-day sessions across 4 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Friday</td><td>6 Mar • 13 Mar • 20 Mar • 27 Mar</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Friday</td><td>6 Mar • 13 Mar • 20 Mar • 27 Mar</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Tuesday</td><td>31 Mar • 7 Apr • 14 Apr • 21 Apr</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Tuesday</td><td>31 Mar • 7 Apr • 14 Apr • 21 Apr</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 3A</strong> <span class="region-badge region-a">Region A</span></td><td>Friday</td><td>26 Jun • 3 Jul • 10 Jul • 17 Jul</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 3B</strong> <span class="region-badge region-b">Region B</span></td><td>Friday</td><td>26 Jun • 3 Jul • 10 Jul • 17 Jul</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 3) Manage My Work -->
+    <section class="card course" data-title="Manage My Work Management">
+      <h2>Manage My Work</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $67</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>2 half-day sessions across 2 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Wednesday</td><td>4 Mar • 11 Mar</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Wednesday</td><td>4 Mar • 11 Mar</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Monday</td><td>18 May • 25 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Monday</td><td>18 May • 25 May</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4) Staff Development -->
+    <section class="card course" data-title="Staff Development Training">
+      <h2>Staff Development</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $107</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>4 half-day sessions across 4 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Friday</td><td>10 Apr • 17 Apr • 24 Apr • 1 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Friday</td><td>10 Apr • 17 Apr • 24 Apr • 1 May</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Wednesday</td><td>13 May • 20 May • 27 May • 3 Jun</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Wednesday</td><td>13 May • 20 May • 27 May • 3 Jun</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 5) Professional Behaviour and Work Ethics -->
+    <section class="card course" data-title="Professional Behaviour Work Ethics">
+      <h2>Professional Behaviour and Work Ethics</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $67</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>2 half-day sessions across 2 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Tuesday</td><td>17 Mar • 24 Mar</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Tuesday</td><td>17 Mar • 24 Mar</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Wednesday</td><td>29 Apr • 6 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Wednesday</td><td>29 Apr • 6 May</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 6) Control and Improve Quality -->
+    <section class="card course" data-title="control and improvement quality product Control and Improve Quality">
+      <h2>Control and Improve Quality</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $117</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>3 half-day sessions across 3 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Monday</td><td>8 Jun • 15 Jun • 22 Jun</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Monday</td><td>8 Jun • 15 Jun • 22 Jun</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Thursday</td><td>2 Jul • 9 Jul • 16 Jul</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Thursday</td><td>2 Jul • 9 Jul • 16 Jul</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 7) Change Mindset -->
+    <section class="card course" data-title="Reset Mindset Change Mindset">
+      <h2>Change Mindset</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $77</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>2 half-day sessions across 2 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Monday</td><td>4 May • 11 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Monday</td><td>4 May • 11 May</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Thursday</td><td>18 Jun • 25 Jun</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Thursday</td><td>18 Jun • 25 Jun</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 3A</strong> <span class="region-badge region-a">Region A</span></td><td>Monday</td><td>6 Jul • 13 Jul</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 3B</strong> <span class="region-badge region-b">Region B</span></td><td>Monday</td><td>6 Jul • 13 Jul</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8) Leading Organisational Change -->
+    <section class="card course" data-title="Leading Organisation Change Leading Organisational Change">
+      <h2>Leading Organisational Change</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $127</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>4 half-day sessions across 4 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Friday</td><td>8 May • 15 May • 22 May • 29 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Friday</td><td>8 May • 15 May • 22 May • 29 May</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Wednesday</td><td>17 Jun • 24 Jun • 1 Jul • 8 Jul</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Wednesday</td><td>17 Jun • 24 Jun • 1 Jul • 8 Jul</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 9) Initiation of a Leader -->
+    <section class="card course" data-title="iniciation of a leader Initiation of a Leader">
+      <h2>Initiation of a Leader</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $107</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>3 half-day sessions across 3 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Thursday</td><td>16 Apr • 23 Apr • 30 Apr</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Thursday</td><td>16 Apr • 23 Apr • 30 Apr</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Tuesday</td><td>5 May • 12 May • 19 May</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Tuesday</td><td>5 May • 12 May • 19 May</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 3A</strong> <span class="region-badge region-a">Region A</span></td><td>Friday</td><td>5 Jun • 12 Jun • 19 Jun</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 3B</strong> <span class="region-badge region-b">Region B</span></td><td>Friday</td><td>5 Jun • 12 Jun • 19 Jun</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 10) Essentials of Leadership -->
+    <section class="card course" data-title="Essentiel of leadership Essentials of Leadership">
+      <h2>Essentials of Leadership</h2>
+      <div class="meta">
+        <span class="pill"><span class="dot fee"></span>Fee: <strong>USD $157</strong></span>
+        <span class="pill"><span class="dot dur"></span>Duration: <strong>6 half-day sessions across 6 weeks</strong></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Day</th>
+            <th>Session Dates</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-region="region-a"><td><strong>Batch 1A</strong> <span class="region-badge region-a">Region A</span></td><td>Wednesday</td><td>18 Mar • 25 Mar • 1 Apr • 8 Apr • 15 Apr • 22 Apr</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 1B</strong> <span class="region-badge region-b">Region B</span></td><td>Wednesday</td><td>18 Mar • 25 Mar • 1 Apr • 8 Apr • 15 Apr • 22 Apr</td></tr>
+          <tr data-region="region-a"><td><strong>Batch 2A</strong> <span class="region-badge region-a">Region A</span></td><td>Thursday</td><td>7 May • 14 May • 21 May • 28 May • 4 Jun • 18 Jun</td></tr>
+          <tr data-region="region-b"><td><strong>Batch 2B</strong> <span class="region-badge region-b">Region B</span></td><td>Thursday</td><td>7 May • 14 May • 21 May • 28 May • 4 Jun • 18 Jun</td></tr>
+        </tbody>
+      </table>
+      <p class="small" style="margin:10px 2px 0;">
+        Note: there is a gap between Session 5 and Session 6 for Batch 2A/2B (4 Jun → 18 Jun) as provided in the schedule.
+      </p>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <strong>Region Information:</strong><br/>
+    <span class="region-badge region-a" style="margin:4px 6px 4px 0;">Region A</span> Europe • Middle East • Africa • Asia • Australia<br/>
+    <span class="region-badge region-b" style="margin:4px 6px 4px 0;">Region B</span> North America • South America<br/><br/>
+    <span class="muted">Use the region filters above to view courses specific to your region, or search by course name/keyword.</span>
+  </div>
+
+</div>
+
+<script>
+  // Region filter functionality
+  const regionButtons = document.querySelectorAll('.region-btn');
+  const courseCards = document.querySelectorAll('.course');
+  let currentRegionFilter = 'all';
+
+  // Timezone toggle function
+  function toggleTimezone(id) {
+    const content = document.getElementById(id);
+    const icon = document.getElementById('toggle-' + id);
+    if (content.style.display === 'none') {
+      content.style.display = 'block';
+      icon.classList.add('open');
+    } else {
+      content.style.display = 'none';
+      icon.classList.remove('open');
+    }
+  }
+  window.toggleTimezone = toggleTimezone;
+
+  regionButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active button
+      regionButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Get filter value
+      currentRegionFilter = btn.getAttribute('data-filter');
+      
+      // Apply filter
+      applyFilters();
+    });
+  });
+
+  // Search functionality
+  const search = document.getElementById('search');
+  let currentSearchQuery = '';
+
+  function normalize(s){
+    return (s || '').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  }
+
+  search.addEventListener('input', () => {
+    currentSearchQuery = normalize(search.value);
+    applyFilters();
+  });
+
+  // Combined filter function
+  function applyFilters() {
+    courseCards.forEach(card => {
+      let showCard = true;
+      
+      // Check search query
+      if (currentSearchQuery) {
+        const hay = normalize(card.getAttribute('data-title')) + ' ' + normalize(card.innerText);
+        if (!hay.includes(currentSearchQuery)) {
+          showCard = false;
+        }
+      }
+      
+      // Check region filter
+      if (currentRegionFilter !== 'all' && showCard) {
+        const rows = card.querySelectorAll('tbody tr[data-region]');
+        let hasVisibleRows = false;
+        
+        rows.forEach(row => {
+          const rowRegion = row.getAttribute('data-region');
+          if (currentRegionFilter === 'all' || rowRegion === currentRegionFilter) {
+            row.style.display = '';
+            hasVisibleRows = true;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        
+        if (!hasVisibleRows) {
+          showCard = false;
+        }
+      } else if (showCard) {
+        // Show all rows if "all" is selected
+        const rows = card.querySelectorAll('tbody tr[data-region]');
+        rows.forEach(row => {
+          row.style.display = '';
+        });
+      }
+      
+      card.classList.toggle('hidden', !showCard);
+    });
+  }
+</script>
+</body>
+</html>
